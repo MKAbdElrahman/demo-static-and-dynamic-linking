@@ -7,10 +7,14 @@ SRC_FILE=mylib.c
 $CC $CFLAGS -c $SRC_FILE -o $OBJ_FILE -fPIC
 # step 2: turn the object file into a dynamic library
 $CC $CFLAGS -shared -Wl,-soname,libmylib.so -o libmylib.so $OBJ_FILE
-# step 3: link the dynamic library to the executable
-$CC $CFLAGS main.c -I . -L . -lmylib -o main
+# step 3: link the dynamic library to the executable 
+# we also store the linking information in the executable
+# another way to is define environment variables LD_LIBRARY_PATH 
+#export LD_LIBRARY_PATH=$PWD  
+
+$CC $CFLAGS main.c -I . -L . -lmylib -o main -Wl,-R .
 # step 4: export the dynamic library to the system
-export LD_LIBRARY_PATH=$PWD
+
 ./main
 # clean up
 rm $OBJ_FILE
